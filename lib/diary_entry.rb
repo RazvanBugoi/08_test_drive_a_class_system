@@ -1,22 +1,25 @@
 class DiaryEntry
     def initialize(title, contents) 
-      # title, contents are strings
-      # ...
+        @title = title
+        @contents = contents
     end
   
     def title
-      # Returns the title as a string
+      return @title
     end
   
     def contents
-      # Returns the contents as a string
+      return @contents
     end
   
     def count_words
-      # Returns the number of words in the contents as an integer
+      return 0 if @contents.empty?
+      return contents.count(" ") + 1
     end
   
     def reading_time(wpm) 
+        fail "WPM must be positive" unless wpm.positive?
+        return (count_words / wpm.to_f).ceil
       # wpm is an integer representing
       # the number of words the user can read per minute
       # Returns an integer representing an estimate of the reading time in minutes

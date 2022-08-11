@@ -18,19 +18,18 @@ class Diary
     def reading_time(wpm) 
         fail "WPM must be positive." unless wpm.positive?
         return (count_words / wpm.to_f).ceil
-      # wpm is an integer representing
-      # the number of words the user can read per minute
-      # Returns an integer representing an estimate of the reading time in minutes
-      # if the user were to read all entries in the diary.
     end
   
     def find_best_entry_for_reading_time(wpm, minutes)
-      # `wpm` is an integer representing the number of words the user can read
-      # per minute.
-      # `minutes` is an integer representing the number of minutes the user
-      # has to read.
-      # Returns an instance of diary entry representing the entry that is closest 
-      # to, but not over, the length that the user could read in the minutes they
-      # have available given their reading speed.
+      return readable_entries(wpm, minutes).max_by(&:count_words)
     end
+
+    private
+
+    def readable_entries(wpm, minutes)
+      return  @diary_entries.filter do |entry|
+        entry.reading_time(wpm) <= minutes
+      end
+    end
+
 end

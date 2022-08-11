@@ -27,7 +27,7 @@ RSpec.describe DiaryEntry do
     describe "#reading_time" do 
         it "fails if the wpm is 0" do
             entry_1 = DiaryEntry.new("First Entry", "I love summer as everybody")
-            expect { entry_1.reading_time(0) }.to raise_error "WPM must be positive"
+            expect { entry_1.reading_time(0) }.to raise_error "WPM must be positive."
         end
 
         it "returns 0 if there are no words in contents" do

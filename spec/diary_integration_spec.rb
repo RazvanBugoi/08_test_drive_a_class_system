@@ -48,6 +48,48 @@ RSpec.describe "Diary Integration" do
             diary.add(entry_2)  
             expect(diary.reading_time(2)).to eq 3
         end
-end
+    end
+
+    describe "best reading time entry behaviour" do
+        it "fails where wpm is 0" do
+            diary = Diary.new
+            entry_1 = DiaryEntry.new("First Entry", "Love summer")  
+            diary.add(entry_1)
+            expect { diary.find_best_entry_for_reading_time(0, 1) }.to raise_error("WPM must be positive.")
+        end
+
+        context "where we just have one entry and it is readable in the time" do
+            it "returns that entry" do
+                diary = Diary.new
+                entry_1 = DiaryEntry.new("First Entry", "Love summer")  
+                diary.add(entry_1)
+                result = diary.find_best_entry_for_reading_time(2, 1)
+                expect(result).to eq entry_1
+            end
+        end
+
+        context "where we just have one entry and it is unreadable in the time" do
+            it "returns nill" do
+                diary = Diary.new
+                entry_1 = DiaryEntry.new("First Entry", "Love summer and winter")  
+                diary.add(entry_1)
+                result = diary.find_best_entry_for_reading_time(2, 1)
+                expect(result).to eq nil
+            end
+        end
+
+        context "where we more than one entry" do
+            it "returns the longest entry the user can read in this time" do
+                diary = Diary.new
+                best_entry = DiaryEntry.new("my_title", "one two")
+                diary.add(DiaryEntry.new("my_title", "one"))
+                diary.add(best_entry)
+                diary.add(DiaryEntry.new("my_title", "one two three"))
+                diary.add(DiaryEntry.new("my_title", "one two three four"))
+                result = diary.find_best_entry_for_reading_time(2, 1)
+                expect(result).to eq best_entry
+            end
+        end
+    end
 end
 end
